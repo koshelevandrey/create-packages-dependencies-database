@@ -2,7 +2,7 @@ import { Database } from "sqlite3";
 
 const CREATE_TABLES_SQL = `
 CREATE TABLE IF NOT EXISTS packages (
-    package_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    package_id INTEGER PRIMARY KEY,
     name TEXT NOT NULL
 );
 

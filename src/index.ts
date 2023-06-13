@@ -15,10 +15,10 @@ async function createDatabaseFromJSON() {
   console.log("Created tables");
 
   const packagesFromFile = await readPackagesJsonFile(JSON_FILE_PATH);
-  await insertPackages(database, packagesFromFile);
+  const packageNameToIndex = await insertPackages(database, packagesFromFile);
   console.log("Inserted packages");
 
-  await insertDependencies(database, packagesFromFile);
+  await insertDependencies(database, packagesFromFile, packageNameToIndex);
   console.log("Inserted dependencies");
 }
 

@@ -5,27 +5,15 @@ const getInsertDependenciesSql = (packagesValues: string) => `
 INSERT INTO dependencies (parent_id, child_id) VALUES ${packagesValues}
 `;
 
-export function insertDependencies(database: Database, packages: Packages) {
+export function insertDependencies(database: Database, packages: Packages, packageNameToIndex: Record<string, number>) {
   return new Promise((resolve, reject) => {
-    const packageNameToIndex = {};
-    Object.keys(packages).forEach((packageName, index) => {
-      packageNameToIndex[packageName] = index;
-    });
-
     const allDependenciesArray: string[] = [];
     Object.keys(packages).forEach((packageName) => {
       const childPackageId = packageNameToIndex[packageName];
-      if (
-        childPackageId !== undefined &&
-        packages[packageName] &&
-        packages[packageName]["Depends:"] &&
-        packages[packageName]["Depends:"].length
-      ) {
+      if (packages[packageName] && packages[packageName]["Depends:"] && packages[packageName]["Depends:"].length) {
         packages[packageName]["Depends:"].forEach((dependencyPackage) => {
           const parentPackageId = packageNameToIndex[dependencyPackage];
-          if (parentPackageId !== undefined) {
-            allDependenciesArray.push(`(${parentPackageId}, ${childPackageId})`);
-          }
+          allDependenciesArray.push(`(${parentPackageId}, ${childPackageId})`);
         });
       }
     });
